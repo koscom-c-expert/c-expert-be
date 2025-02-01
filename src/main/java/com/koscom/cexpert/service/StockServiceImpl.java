@@ -32,8 +32,8 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
-    public Stock updateStock(UpdateStockRequest req) {
-        Stock stockToUpdate = stockRepository.findById(req.getId()).orElse(null);
+    public Stock updateStock(Long id, UpdateStockRequest req) {
+        Stock stockToUpdate = stockRepository.findById(id).orElse(null);
 
         // 찾을 수 없는 경우
         if (stockToUpdate == null) {
