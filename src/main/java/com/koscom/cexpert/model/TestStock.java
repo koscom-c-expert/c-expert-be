@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Stock {
+public class TestStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,13 +20,13 @@ public class Stock {
 
     private double currentPrice;
 
-    public Stock(Long id, String name, double currentPrice) {
+    public TestStock(Long id, String name, double currentPrice) {
         this.id = id;
         this.name = name;
         this.currentPrice = currentPrice;
     }
 
-    public Stock(String name, double currentPrice) {
+    public TestStock(String name, double currentPrice) {
         this.name = name;
         this.currentPrice = currentPrice;
     }

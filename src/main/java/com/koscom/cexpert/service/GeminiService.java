@@ -1,11 +1,10 @@
 package com.koscom.cexpert.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.koscom.cexpert.model.Stock;
+import com.koscom.cexpert.model.TestStock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -39,7 +38,7 @@ You're Stock-Classification-GPT.
      *  - 메시지가 검열되어 컨텐츠가 오지 않은 경우
      */
     @Override
-    public Map<String, List<Stock>> classifyStocksByKeyword(List<Stock> stocks, String keyword) {
+    public Map<String, List<TestStock>> classifyStocksByKeyword(List<TestStock> testStocks, String keyword) {
         /*
         ResponseEntity<String> response = null;
         try {

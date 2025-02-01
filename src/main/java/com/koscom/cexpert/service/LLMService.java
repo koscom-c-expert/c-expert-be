@@ -1,10 +1,10 @@
 package com.koscom.cexpert.service;
 
-import com.koscom.cexpert.model.Stock;
+import com.koscom.cexpert.model.TestStock;
 
 import java.util.List;
 import java.util.Map;
 
 public interface LLMService {
-    Map<String, List<Stock>> classifyStocksByKeyword(List<Stock> stocks, String keyword);
+    Map<String, List<TestStock>> classifyStocksByKeyword(List<TestStock> testStocks, String keyword);
 }
