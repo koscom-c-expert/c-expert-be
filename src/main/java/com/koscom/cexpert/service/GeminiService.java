@@ -1,8 +1,7 @@
-package com.koscom.cexpert.repository;
+package com.koscom.cexpert.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koscom.cexpert.model.Stock;
-import com.koscom.cexpert.service.LLMService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
