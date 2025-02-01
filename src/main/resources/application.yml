@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: c-expert
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
