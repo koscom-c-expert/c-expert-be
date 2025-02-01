@@ -15,6 +15,8 @@ feature -> develop -> main 으로 PR
   - intellij: 서버 실행시 Configuration > Edit... 에서 Active Profiles를 `local`로 설정
 
 ### 기타
+#### Swagger
+`localhost:8080/swagger-ui/index.html`
 #### H2 Database
 1. localhost:8080/h2-console 접속
 2. JDBC URL에 `jdbc:h2:mem:test` 입력 후 Connect
