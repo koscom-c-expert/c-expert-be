@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class Stock {
     public String name;
-    public int CategoryId;
+    public int categoryId;
 }
