@@ -32,6 +32,11 @@ public class StockServiceImpl implements StockService {
     }
 
     @Override
+    public Stock getStockById(Long id) {
+        return stockRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public Stock updateStock(Long id, UpdateStockRequest req) {
         Stock stockToUpdate = stockRepository.findById(id).orElse(null);
 

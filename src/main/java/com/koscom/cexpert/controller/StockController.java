@@ -31,6 +31,13 @@ public class StockController {
         return ApiResponse.success(stocks);
     }
 
+    // 주식 조회
+    @GetMapping("/{id}")
+    public ApiResponse<Stock> getStockById(@PathVariable Long id) {
+        Stock stock = stockService.getStockById(id);
+        return ApiResponse.success(stock);
+    }
+
     // 주식 정보 수정
     @PutMapping("/{id}")
     public ApiResponse<Stock> updateStock(

@@ -9,6 +9,7 @@ import java.util.List;
 public interface StockService {
     Stock createStock(CreateStockRequest req);
     List<Stock> getAllStocks();
+    Stock getStockById(Long id);
     Stock updateStock(Long id, UpdateStockRequest req);
     void deleteStock(Long id);
 }
