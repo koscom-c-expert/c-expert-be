@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 // TODO: 참고용 코드이므로 나중에 지울 것
-@Component
+// @Component
 @Slf4j
 @RequiredArgsConstructor
 public class GeminiService implements LLMService {
