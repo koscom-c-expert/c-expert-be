@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Custom ###
+application-local.properties
+application-prod.properties
