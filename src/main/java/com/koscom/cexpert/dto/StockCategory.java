@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class StockCategory {
-    public final int id;
-    public final String name;
+    private final Integer id;
+    private final String name;
 }
