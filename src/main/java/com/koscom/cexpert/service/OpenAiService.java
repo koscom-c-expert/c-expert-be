@@ -2,9 +2,7 @@ package com.koscom.cexpert.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.koscom.cexpert.dto.ClassificationRequest;
-import com.koscom.cexpert.dto.ClassificationResponse;
-import com.koscom.cexpert.dto.LLMStockDto;
+import com.koscom.cexpert.dto.*;
 import com.koscom.cexpert.exception.CommonException;
 import com.koscom.cexpert.model.Stock;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +51,26 @@ public class OpenAiService implements LLMService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<RebalanceResponse> rebalanceCategories(List<RebalanceRequest> req) {
+        Prompt prompt = getRebalancePrompt(req);
+        log.info("### prompt message :== {}", prompt);
+
+        String res = callChatApi(prompt);
+        log.info("### chat api res :== {}", res);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<RebalanceResponse> responseList;
+        try {
+            responseList = objectMapper.readValue(res, objectMapper.getTypeFactory().constructCollectionType(List.class, RebalanceResponse.class));
+        } catch (Exception e) {
+            throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "!! LLM response parsing error");
+        }
+
+        return responseList;
+
+    }
+
     private Prompt getPrompt(List<Stock> stockList, String keyword) {
         String command = """
                 1. {stocks}
@@ -89,6 +107,50 @@ public class OpenAiService implements LLMService {
         return new Prompt(List.of(message));
 
     }
+
+    private Prompt getRebalancePrompt(List<RebalanceRequest> categories) {
+        String command = """
+                [{categories}]
+                위 배열 내의 원소들은 json 객체를 의미해.
+                각 객체의, "category" 속성은 "주식의 분류"를 의미하고, "percentage" 속성은 "해당 분류의 주식이, 전체 보유 주식 중에서 차지하는 비율"을 퍼센트로 나타낸 것을 의미해.
+                
+                너가 할 일은, 각 객체의 "category" 속성과 "percentage" 속성을 확인해서, 주식의 분류의 비율을 어떻게 조정할지 판단하는 것이야.
+                각 분류에 대해서 다음 척도의 점수를 매겨줘.
+                1: 비율을 많이 줄인다.
+                2: 비율을 약간 줄인다.
+                3: 현재 비율이 적당하다.
+                4: 비율을 약간 늘린다.
+                5: 비율을 많이 늘린다.
+                
+                단 다음의 주의사항을 생각해줘.
+                비율이 늘어나는 분류가 있다면, 비율이 줄어드는 분류도 있어야 해.
+                비율이 줄어드는 분류가 있다면, 비율이 늘어나는 분류도 있어야 해.
+                
+                응답은 json 배열로 줘.
+                바로 json으로 변환할거야.
+                
+                json 배열 내 객체에는, "category" 속성과 "level" 속성을 입력해줘.
+                여기서 "category" 속성에는 주식의 분류를 입력하고, "level" 속성에는 해당 분류에 대해 너가 판단한 점수를 입력해줘.
+                
+                아래가 예시야.
+                [\\{"category": "반도체", "level": 3\\}, \\{"category": "부동산", "level": 1\\}, \\{"category": "방산", "level": 5\\}, \\{"category": "식료품", "level": 2\\}, \\{"category": "바이오", "level": 4\\}]
+                """;
+
+        PromptTemplate template = new PromptTemplate(command);
+
+        String rawCategories = categories.stream()
+                .map(s -> "{\"category\": \"" + s.getCategory() + "\", \"percentage\": " + s.getPercentage() + "}")
+                .collect(Collectors.joining(", "));
+
+        if (categories.isEmpty()) {
+            rawCategories = "";
+        }
+
+        Message message = template.createMessage(Map.of("categories", rawCategories));
+        return new Prompt(List.of(message));
+    }
+
+
 
     private String callChatApi(Prompt prompt) {
         String res = chatClient.prompt(prompt).call().content();
