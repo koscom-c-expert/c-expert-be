@@ -1,3 +1,15 @@
+PID=$(ps aux | grep '[j]ava' | awk '{print $2}')
+if [ -n "$PID" ]; then
+  echo "shutdown server..."
+  kill -9 $PID
+else
+  echo "server is not up..."
+fi
+
+echo "server start"
+
+git checkout develop
+git pull
 ./gradlew clean build -x test
 
 export SPRING_PROFILES_ACTIVE=local
