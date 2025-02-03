@@ -9,5 +9,5 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CreateClassificationResponse {
     private final List<StockCategory> stockCategories;
-    private final List<Stock> stocks;
+    private final List<StockDto> stockDtos;
 }

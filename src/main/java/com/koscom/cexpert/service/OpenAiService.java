@@ -2,7 +2,7 @@ package com.koscom.cexpert.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.koscom.cexpert.dto.Stock;
+import com.koscom.cexpert.dto.StockDto;
 import com.koscom.cexpert.dto.StockCategory;
 import com.koscom.cexpert.exception.CommonException;
 import lombok.Data;
@@ -34,7 +34,7 @@ public class OpenAiService implements LLMService {
         private final String stockCategoryName;
     }
     @Override
-    public List<Stock> classifyStocks(List<StockCategory> stockCategories, List<String> stocks) {
+    public List<StockDto> classifyStocks(List<StockCategory> stockCategories, List<String> stocks) {
         Map<String, Integer> categoryMap = new HashMap();
         stockCategories.forEach(s -> categoryMap.put(s.getName(), s.getId()));
         String command = """
@@ -69,19 +69,19 @@ public class OpenAiService implements LLMService {
         String res = chatClient.prompt(prompt).call().content();
         System.out.println(res);
         ObjectMapper mapper = new ObjectMapper();
-        List<Stock> indexedStocks = new ArrayList();
+        List<StockDto> indexedStockDtos = new ArrayList();
         try {
             List<Map<String, String>> parsedResult = mapper.readValue(res, new TypeReference<List<Map<String, String>>>(){});
             for (Map<String, String> map : parsedResult) {
                 for (Map.Entry<String, String> entry: map.entrySet()) {
-                    indexedStocks.add(new Stock(entry.getKey(), categoryMap.get(entry.getValue())));
+                    indexedStockDtos.add(new StockDto(entry.getKey(), categoryMap.get(entry.getValue())));
                 }
             }
         } catch (IOException e) {
             throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "LLM error");
         }
 
-        return indexedStocks;
+        return indexedStockDtos;
 
     }
 }
