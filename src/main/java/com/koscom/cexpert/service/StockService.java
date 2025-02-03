@@ -1,15 +1,57 @@
 package com.koscom.cexpert.service;
 
-import com.koscom.cexpert.dto.CreateStockRequest;
-import com.koscom.cexpert.dto.UpdateStockRequest;
-import com.koscom.cexpert.model.TestStock;
+import com.koscom.cexpert.dto.StockRequest;
+import com.koscom.cexpert.exception.EntityNotFoundException;
+import com.koscom.cexpert.model.Stock;
+import com.koscom.cexpert.repository.StockRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface StockService {
-    TestStock createStock(CreateStockRequest req);
-    List<TestStock> getAllStocks();
-    TestStock getStockById(Long id);
-    TestStock updateStock(Long id, UpdateStockRequest req);
-    void deleteStock(Long id);
+@Service
+@RequiredArgsConstructor
+@Transactional
+@Slf4j
+public class StockService {
+
+    private final StockRepository stockRepository;
+
+    public Stock createStock(StockRequest req) {
+        Stock newStock = req.toStock();
+        return stockRepository.save(newStock);
+    }
+
+    public List<Stock> getAllStocksByUserId(String userId) {
+        return stockRepository.findAllByUserId(userId);
+    }
+
+    public Stock getStockById(Long id) {
+        return stockRepository.findById(id).orElse(null);
+    }
+
+    public Stock updateStock(Long id, StockRequest req) {
+        Stock stockToUpdate = stockRepository.findById(id).orElse(null);
+
+        if (stockToUpdate == null) {
+            throw new EntityNotFoundException();
+        }
+
+        stockToUpdate.setTicker(req.getTicker());
+        stockToUpdate.setAveragePurchasePrice(req.getAveragePurchasePrice());
+        stockToUpdate.setQuantity(req.getQuantity());
+        return stockRepository.save(stockToUpdate);
+    }
+
+    public void deleteStock(Long id) {
+        Stock stockToUpdate = stockRepository.findById(id).orElse(null);
+
+        if (stockToUpdate == null) {
+            throw new EntityNotFoundException();
+        }
+
+        stockRepository.deleteById(id);
+    }
 }

@@ -1,7 +1,7 @@
 package com.koscom.cexpert.controller;
 
 import com.koscom.cexpert.dto.*;
-import com.koscom.cexpert.model.TestStock;
+import com.koscom.cexpert.model.Stock;
 import com.koscom.cexpert.service.LLMService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RestController
@@ -36,7 +33,7 @@ public class ClassificationController {
         List<StockCategory> stockCategories = IntStream.range(0, distinctCategories.size())
                 .mapToObj(index -> new StockCategory(index, distinctCategories.get(index)))
                 .toList();
-        List<Stock> stocks = llmService.classifyStocks(stockCategories, req.getStocks());
+        List<StockDto> stocks = llmService.classifyStocks(stockCategories, req.getStocks());
         return ApiResponse.success(new CreateClassificationResponse(stockCategories, stocks));
     }
 }
