@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.koscom.cexpert.dto.ClassificationRequest;
 import com.koscom.cexpert.dto.ClassificationResponse;
+import com.koscom.cexpert.dto.LLMStockDto;
 import com.koscom.cexpert.exception.CommonException;
 import com.koscom.cexpert.model.Stock;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +41,14 @@ public class OpenAiService implements LLMService {
 
         String res = callChatApi(prompt);
         log.info("### chat api res :== {}", res);
-        Map<String, String> resMap = resToMap(res);
+        Map<String, LLMStockDto> resMap = resToMap(res);
 
         return stockList.stream().map(s -> ClassificationResponse.builder()
                         .ticker(s.getTicker())
                         .averagePurchasePrice(s.getAveragePurchasePrice())
                         .quantity(s.getQuantity())
-                        .newCategory(resMap.getOrDefault(s.getTicker(), ETC))
+                        .newCategory(resMap.get(s.getTicker()).getNewCategory())
+                        .reason(resMap.get(s.getTicker()).getReason())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -61,8 +63,12 @@ public class OpenAiService implements LLMService {
                 
                 1번와 2번이 위와 같이 주어진 경우
                 key가 1번이고 2번이 분류키워드야.
+                value는
+                \\{"newCategory" : "Apple", "reason" : "삼성전자는 "\\}
+                으로 너가 분류햔 이유도 reason value로 적어줘
+                
                 응답은 json으로만 줘 바로 json으로 리포맷팅할거야 아래가 예시야
-                \\{"Apple": "AI 관련 주식", "Microsoft": "AI 관련 주식", "Pfizer": "기타"\\}
+                \\{"Apple": \\{"newCategory" : "AI", "reason" : "삼성전자는 "\\}, "Microsoft":\\{"newCategory" : "AI", "reason" : "삼성전자는 "\\}, "Pfizer": \\{"newCategory" : "기타", "reason" : "삼성전자는 "\\}\\}
                 
                 1번에 있는 값들로만 응답을 줘
                
@@ -93,7 +99,7 @@ public class OpenAiService implements LLMService {
         return res;
     }
 
-    private Map<String, String> resToMap(String res) {
+    private Map<String, LLMStockDto> resToMap(String res) {
         try {
             return objectMapper.readValue(res, new TypeReference<>() {
             });

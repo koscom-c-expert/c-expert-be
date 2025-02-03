@@ -17,7 +17,7 @@ public class ClassificationController {
     private final LLMService llmService;
 
     @PostMapping
-    public ApiResponse<List<ClassificationResponse>> createClassification(@RequestBody ClassificationRequest req) {
+    public ApiResponse<List<ClassificationResponse>> classify(@RequestBody ClassificationRequest req) {
         List<ClassificationResponse> res = llmService.classifyStocks(req);
         return ApiResponse.success(res);
     }
