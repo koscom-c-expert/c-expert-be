@@ -13,4 +13,6 @@ public class ClassificationResponse {
     private int quantity;
 
     private String newCategory;
+
+    private String reason;
 }
