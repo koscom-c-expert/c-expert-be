@@ -6,14 +6,17 @@ else
   echo "server is not up..."
 fi
 
-echo "server start"
-
 git checkout develop
 git pull
 ./gradlew clean build -x test
 
-export SPRING_PROFILES_ACTIVE=local
+export SPRING_PROFILES_ACTIVE=dev
 
-# set OPENAI_API_KEY environment variables manually
+# set environment variables below manually
+export DB_HOST=$DB_HOST
+export DB_NAME=$DB_NAME
+export DB_USERNAME=$DB_USERNAME
+export DB_PASSWORD=$DB_PASSWORD
 export OPENAI_API_KEY=$OPENAI_API_KEY
+
 java -jar ./build/libs/c-expert-0.0.1-SNAPSHOT.jar
