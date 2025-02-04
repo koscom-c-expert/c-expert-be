@@ -167,7 +167,7 @@ public class OpenAiService implements LLMService {
             return objectMapper.readValue(res, new TypeReference<>() {
             });
         } catch (IOException e) {
-            throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "!! LLM response parsing error");
+            throw new CommonException(HttpStatus.INTERNAL_SERVER_ERROR, "!! LLM response parsing error res :== " + res);
         }
     }
 }
