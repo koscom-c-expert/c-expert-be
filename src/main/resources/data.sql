@@ -81,3 +81,25 @@ VALUES
     ('user5', '흥아해운', 1714, 10),
     ('user5', '대한전선', 12650, 10),
     ('user5', 'ACE 포스코그룹포커스', 4130, 10);
+
+
+INSERT INTO stock (user_id, ticker, average_purchase_price, quantity)
+VALUES
+    ('koscom', '마이크로소프트', 600000, 13),
+    ('koscom', '애플', 300000, 6),
+    ('koscom', '리얼티인컴', 3485, 10),
+    ('koscom', '엔비디아', 154000, 44),
+    ('koscom', '팔란티어', 30800, 10),
+    ('koscom', 'QQQM', 259000, 10),
+    ('koscom', 'QQQ', 537000, 3),
+    ('koscom', 'SOXX', 300000, 10),
+    ('koscom', 'SOXL', 41000, 30),
+    ('koscom', '삼성전자', 51000, 50),
+    ('koscom', '레인보우로보틱스', 35000, 3),
+    ('koscom', 'TIGER 미국S&P500', 15000, 30),
+    ('koscom', '펩시코', 210000, 30),
+    ('koscom', '엑손 엔터프라이즈', 920000, 1),
+    ('koscom', '테슬라', 540000, 30),
+    ('koscom', 'ACE미국30년국채액티브(H)', 8000, 700),
+    ('koscom', 'KODEX미국나스닥100(H)', 15000, 46),
+    ('koscom', 'JEPI', 78000, 100);
