@@ -1,33 +1,32 @@
 package com.koscom.cexpert.model;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "stock")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Stock {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String userId;
 
-    private double currentPrice;
+    private String ticker;
 
-    public Stock(Long id, String name, double currentPrice) {
-        this.id = id;
-        this.name = name;
-        this.currentPrice = currentPrice;
-    }
+    private int averagePurchasePrice;
 
-    public Stock(String name, double currentPrice) {
-        this.name = name;
-        this.currentPrice = currentPrice;
+    private int quantity;
+
+    public Stock(String userId, String ticker, int averagePurchasePrice, int quantity) {
+        this.userId = userId;
+        this.ticker = ticker;
+        this.averagePurchasePrice = averagePurchasePrice;
+        this.quantity = quantity;
     }
 }
