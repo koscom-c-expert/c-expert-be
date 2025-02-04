@@ -18,5 +18,6 @@ export DB_NAME=$DB_NAME
 export DB_USERNAME=$DB_USERNAME
 export DB_PASSWORD=$DB_PASSWORD
 export OPENAI_API_KEY=$OPENAI_API_KEY
+export SPRING_JPA_DDL_AUTO=$SPRING_JPA_DDL_AUTO
 
-java -jar ./build/libs/c-expert-0.0.1-SNAPSHOT.jar
+nohup java -jar ./build/libs/c-expert-0.0.1-SNAPSHOT.jar & > /dev/null
